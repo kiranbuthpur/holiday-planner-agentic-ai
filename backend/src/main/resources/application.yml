@@ -1,0 +1,148 @@
+spring:
+  application:
+    name: holiday-planner-backend
+  
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/holiday_planner}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:password}
+    driver-class-name: org.postgresql.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+  
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:your-email@gmail.com}
+    password: ${MAIL_PASSWORD:your-app-password}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY:your-openai-api-key}
+      chat:
+        model: gpt-4-turbo-preview
+        temperature: 0.7
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+# Weather API Configuration
+weather:
+  api:
+    key: ${OPENWEATHER_API_KEY:your-openweather-api-key}
+    base-url: https://api.openweathermap.org/data/2.5
+    forecast-url: https://api.openweathermap.org/data/2.5/forecast
+
+# Google API Configuration
+google:
+  oauth:
+    client-id: ${GOOGLE_CLIENT_ID:your-google-client-id}
+    client-secret: ${GOOGLE_CLIENT_SECRET:your-google-client-secret}
+    redirect-uri: ${GOOGLE_REDIRECT_URI:http://localhost:3000/auth/callback}
+  
+  calendar:
+    application-name: Holiday Planner
+    scopes:
+      - https://www.googleapis.com/auth/calendar
+      - https://www.googleapis.com/auth/gmail.send
+  
+  credentials:
+    file-path: ${GOOGLE_CREDENTIALS_PATH:src/main/resources/google-credentials.json}
+
+# Email Template Configuration
+email:
+  template:
+    base-url: ${FRONTEND_URL:http://localhost:3000}
+    logo-url: ${LOGO_URL:http://localhost:3000/assets/logo.png}
+
+# AI Agent Configuration
+ai:
+  agent:
+    weather-learning:
+      enabled: true
+      model: gpt-4-turbo-preview
+      temperature: 0.3
+      max-tokens: 1000
+    
+    activity-optimization:
+      enabled: true
+      indoor-temp-threshold: 28
+      outdoor-temp-threshold: 25
+      comfort-humidity-max: 70
+
+# Logging Configuration
+logging:
+  level:
+    com.holidayplanner: INFO
+    org.springframework.ai: DEBUG
+    org.springframework.web: INFO
+  
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  
+  file:
+    name: logs/holiday-planner.log
+
+# CORS Configuration
+cors:
+  allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:3000}
+  allowed-methods: GET,POST,PUT,DELETE,OPTIONS
+  allowed-headers: "*"
+  allow-credentials: true
+
+# Scheduler Configuration
+scheduler:
+  weather-update:
+    cron: "0 0 6,18 * * *"  # Every day at 6 AM and 6 PM
+  
+  email-notifications:
+    cron: "0 0 9 * * *"     # Every day at 9 AM
+
+# Italy Cities Configuration
+italy:
+  cities:
+    - name: Rome
+      lat: 41.9028
+      lon: 12.4964
+    - name: Milan
+      lat: 45.4642
+      lon: 9.1900
+    - name: Venice
+      lat: 45.4408
+      lon: 12.3155
+    - name: Florence
+      lat: 43.7696
+      lon: 11.2558
+    - name: Naples
+      lat: 40.8518
+      lon: 14.2681
+    - name: Turin
+      lat: 45.0703
+      lon: 7.6869
+    - name: Genoa
+      lat: 44.4056
+      lon: 8.9463
+    - name: Bologna
+      lat: 44.4949
+      lon: 11.3426
